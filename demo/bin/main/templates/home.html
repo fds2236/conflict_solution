@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RealGrid Example</title>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- jQuery CDN 추가 -->
+</head>
+<body>
+  <table>
+        <tr>
+            <td>ppsnCd:</td>
+            <td>
+            	<input type="text" id="ppsnCd">
+           	</td>
+        </tr>
+        <tr>
+            <td>corpCd:</td>
+            <td>
+            	<input type="text" id="corpCd">
+            </td>
+        </tr>
+        <tr>
+            <td>pips코드:</td>
+            <td>
+            	<input type="number" id="pipsCd">
+           	</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button onclick="goUpdate()">업데이트</button>
+            </td>
+        </tr>
+        
+                <tr>
+            <td colspan="2">
+                <button onclick="goInsert()">신규등록</button>
+            </td>
+        </tr>
+    </table>
+
+
+    <script>
+    
+    // 저장버튼 클릭
+     function goUpdate() {
+        var ppsnCd = $("#ppsnCd").val();
+        var corpCd = $("#corpCd").val();
+        var pipsCd = $("#pipsCd").val();
+        var selectYn = 'Y';
+    	var goUrl = '/popup?ppsnCd=' + ppsnCd + '&corpCd=' + corpCd + '&pipsCd=' + pipsCd + '&selectYn=' + selectYn;
+    	
+    	  // 새 창으로 URL 열기
+        window.open(goUrl, '_blank'); // '_blank'는 새 창에서 열기
+
+        }
+    
+     function goInsert() {
+        var selectYn = 'N'
+     	var goUrl = '/popup?selectYn=' + selectYn;
+     	
+     	  // 새 창으로 URL 열기
+         window.open(goUrl, '_blank'); // '_blank'는 새 창에서 열기
+         }
+    </script>
+</body>
+</html>

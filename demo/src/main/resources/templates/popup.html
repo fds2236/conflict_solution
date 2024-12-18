@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RealGrid Example</title>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- jQuery CDN 추가 -->
+</head>
+<body>
+    <h1>팝업창 파이팅!!!</h1>
+<form>
+    <input type="hidden" id="ppsnCd" name="ppsnCd" th:value="${params.ppsnCd}">
+    <input type="hidden" id="corpCd" name="corpCd" th:value="${params.corpCd}">
+    <input type="hidden" id="pipsCd" name="pipsCd" th:value="${params.pipsCd}">
+    <input type="hidden" id="selectYn" name="selectYn" th:value="${params.selectYn}">
+    
+    <div>
+    <table>
+        <tr>
+            <td>ppsnCd:</td>
+            <td>
+            	<select id="ppsnSelect" name="ppsnSelect">
+                     <th:block th:if="${params.selectYn == 'N'}">
+                     	<option value="">선택하세요</option>
+                         <!-- ppsnList가 비어 있지 않은 경우에만 반복 -->
+                         <th:block th:each="ppsn : ${ppsnList}">
+                             <option th:value="${ppsn.ppsnCd}" th:attr="data-ppsn-name=${ppsn.ppsnName}" th:text="${'[' + ppsn.ppsnCd + '] ' + ppsn.ppsnName}"></option>
+                         </th:block>
+                     </th:block>
+                     <th:block th:if="${params.selectYn == 'Y'}">
+                     	<option th:value="${params.ppsnCd}" th:attr="data-ppsn-name=${ppsnList[0].ppsnName}" th:text="${'[' + params.ppsnCd + '] ' + ppsnList[0].ppsnName}" selected="selected"></option>
+                     </th:block>
+            	</select>
+           	</td>
+        </tr>
+        <tr>
+            <td>corpCd:</td>
+            <td>
+            	<select id="corpSelect" name="corpSelect">
+					<option value="">선택하세요</option>
+            	</select>
+            </td>
+        </tr>
+        <tr>
+            <td>pips코드:</td>
+            <td>
+            	<input type="number" id="pips" name="pipsCd" maxlength="5" th:value="${params.pipsCd}">
+           	</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button onclick="saveData()">Save</button>
+            </td>
+        </tr>
+    </table>
+    </div>
+</form>
+    <script>
+    $(document).ready(function() {
+        // 초기 상태 설정
+        updateSelectDisabledState();
+    });
+    
+    // 비활성화 설정
+    function updateSelectDisabledState() {
+        // selectYn 값 가져오기
+        var selectYn = $("#selectYn").val();
+
+        // 선택 박스 비활성화 설정
+        if (selectYn == 'Y') { 
+        	// 넘어온 데이터있을 때
+            $("#ppsnSelect").prop("disabled", true);
+            let ppsnCd = $("#ppsnSelect");
+            corpId(ppsnCd);
+            $("#corpSelect").prop("disabled", true);
+            
+        } else {
+        	// 넘어온 데이터없을 때
+            $("#ppsnSelect").prop("disabled", false);
+            $("#corpSelect").prop("disabled", false);
+            
+        }
+    }
+    
+    function corpId(ppsnCd){
+    	
+    	let corpCd = '';
+    	let corpName = $("#ppsnSelect option:selected").data("ppsn-name");
+    	console.log("corpName : " + corpName);
+
+    	if(ppsnCd == '02'){
+    		corpCd = '000B'
+    		} else if(ppsnCd == '03'){
+    			corpCd = '000C'
+   			} else if(ppsnCd == '04'){
+   				corpCd = '000D'
+   			} else if(ppsnCd == '05'){
+   				corpCd = '000D'
+   			} else if(corpCd == '06'){
+   				corpCd = '000E'
+   			}
+    	
+        $("#corpSelect").append(
+            $("<option></option>").val(corpCd).text('[' + corpCd + '] ' + corpName)
+        );
+
+        $("#corpSelect").val(corpCd);
+    	}
+    
+    
+    // ppsnCd 선택에 따른 corpCd 셋팅
+    $("#ppsnSelect").change(function() {
+    	
+    	("#corpSelect").empty();
+        var ppsnCd = $(this).val(); // 선택된 값 가져오기
+        if(ppsnCd == ''){
+        	// 선택하지 않았을 때
+        	
+        } else if(ppsnCd == '01'){
+        	// 01 기업
+        	
+        } else {
+        	corpId(ppsnCd);
+        }
+		        
+        
+        
+    });
+    
+    
+    
+    
+    
+    
+    
+    // 저장버튼 클릭
+    function saveData(){
+    	
+    	if(!validCheck()){
+    		return flase;
+    	}
+		
+    	
+    	
+    }
+    
+    // 유효성 체크
+    function validCheck() {
+        var pips = $("#pips").val();
+        console.log("pips : " + pips);
+        
+        if (pips.length > 5) {
+            alert("pips코드는 최대 5자리 숫자입니다.");
+            return false; // 폼 제출 방지
+        }
+        return true;
+    }
+
+    </script>
+</body>
+</html>
